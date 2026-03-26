@@ -86,9 +86,10 @@ Tests cover:
 
 ### Screenshots for evaluator
 
-![Screenshot 2026-03-25 at 8.35.23 PM](Screenshot 2026-03-25 at 8.35.23 PM.png)
+![Screenshot 2026-03-25 at 8.35.23 PM](screenshots/pawpal_2026-03-25_20-35-23.png)
 
-![Screenshot 2026-03-25 at 8.35.57 PM](Screenshot 2026-03-25 at 8.35.57 PM.png)
+![Screenshot 2026-03-25 at 8.35.57 PM](screenshots/pawpal_2026-03-25_20-35-57.png)
+
 
 
 
