@@ -68,21 +68,56 @@ if st.session_state.tasks:
 else:
     st.info("No tasks yet. Add one above.")
 
+from pawpal_system import Owner, Pet, Task, Scheduler
+
 st.divider()
 
 st.subheader("Build Schedule")
 st.caption("This button should call your scheduling logic once you implement it.")
 
 if st.button("Generate schedule"):
-    st.warning(
-        "Not implemented yet. Next step: create your scheduling logic (classes/functions) and call it here."
-    )
-    st.markdown(
-        """
-Suggested approach:
-1. Design your UML (draft).
-2. Create class stubs (no logic).
-3. Implement scheduling behavior.
-4. Connect your scheduler here and display results.
-"""
-    )
+    owner = Owner(name=owner_name)
+    pet = Pet(name=pet_name, species=species)
+
+    for raw in st.session_state.tasks:
+        task = Task(
+            title=raw.get("title", "Untitled"),
+            duration_minutes=int(raw.get("duration_minutes", 0)),
+            priority=raw.get("priority", "medium"),
+            category=raw.get("category", "general"),
+        )
+        pet.add_task(task)
+
+    owner.add_pet(pet)
+    scheduler = Scheduler(day_start=time(hour=6), day_end=time(hour=22))
+    plan = scheduler.generate_daily_plan(owner)
+
+    st.markdown("### Generated Schedule")
+    if plan["schedule"]:
+        rows = []
+        for item in plan["schedule"]:
+            rows.append({
+                "Time": f"{item.start_time.strftime('%H:%M')}-{item.end_time.strftime('%H:%M')}",
+                "Task": item.task.title,
+                "Category": item.task.category,
+                "Priority": item.task.priority,
+                "Rationale": item.rationale,
+            })
+        st.table(rows)
+    else:
+        st.info("No tasks could be scheduled.")
+
+    if plan["skipped"]:
+        st.markdown("### Skipped Tasks")
+        for skip in plan["skipped"]:
+            st.write(f"- {skip['task']}: {skip['reason']}")
+
+    if plan["conflicts"]:
+        st.warning("Potential conflicts detected")
+        for c in plan["conflicts"]:
+            st.write(f"- {c['task']}: {c['reason']}")
+
+    explanation = scheduler.explain_schedule(plan)
+    st.markdown("### Explanation")
+    st.text(explanation)
+

@@ -4,13 +4,16 @@
 
 **a. Initial design**
 
-- Briefly describe your initial UML design.
-- What classes did you include, and what responsibilities did you assign to each?
+- Owner: holds owner metadata, a list of pets, and methods to add/remove pets and aggregate tasks.
+- Pet: represents a single pet, stores tasks, and offers pending-task accessors.
+- Task: data class for a care action; stores title, duration, category, priority, optional due_time, recurring weekdays, and completion state.
+- Scheduler: builds a day plan for an owner by collecting pending tasks across pets, sorting by priority and due time, resolving schedule constraints, and returning scheduled/skipped/conflicting sets.
 
 **b. Design changes**
 
-- Did your design change during implementation?
-- If yes, describe at least one change and why you made it.
+- Initial design had Task and Pet only. I added Owner to centrally manage multi-pet scenarios and keep task aggregation in one place.
+- I also added a dedicated `ScheduledTask` class to separate raw tasks from scheduled instances with assigned time slots.
+- A conflict detection pass (`detect_conflicts`) and a basic recurring-task expansion step were added while implementing scheduling logic.
 
 ---
 
@@ -18,13 +21,14 @@
 
 **a. Constraints and priorities**
 
-- What constraints does your scheduler consider (for example: time, priority, preferences)?
-- How did you decide which constraints mattered most?
+- The scheduler enforces an availability window (08:00–22:00 by default), task duration, and hard due times.
+- It prioritizes tasks by priority level (high/medium/low), due time, and shorter duration as tie breaker.
+- Recurring and date-specific tasks are included only on applicable days.
 
 **b. Tradeoffs**
 
-- Describe one tradeoff your scheduler makes.
-- Why is that tradeoff reasonable for this scenario?
+- The scheduler only checks conflicts at discrete scheduled start/end boundaries, not every possible overlapping block; it may schedule two tasks back-to-back rather than trying to reslot them optimally.
+- This tradeoff simplifies logic and keeps runtime O(n^2) vs complex constraint solving, matching a minimum viable pet planner.
 
 ---
 
