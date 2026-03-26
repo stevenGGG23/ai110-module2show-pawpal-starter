@@ -84,6 +84,11 @@ Tests cover:
 
 ## 📸 Demo
 
-<a href="screenshots/pawpal_screenshot1.png" target="_blank"><img src='screenshots/pawpal_screenshot1.png' title='PawPal App - Owner & Pet Setup' width='' alt='PawPal App - Owner & Pet Setup' class='center-block' /></a>
+### Screenshots for evaluator
 
-<a href="screenshots/pawpal_screenshot2.png" target="_blank"><img src='screenshots/pawpal_screenshot2.png' title='PawPal App - Schedule & Task Insights' width='' alt='PawPal App - Schedule & Task Insights' class='center-block' /></a>
+![Screenshot 2026-03-25 at 8.35.23 PM](Screenshot 2026-03-25 at 8.35.23 PM.png)
+
+![Screenshot 2026-03-25 at 8.35.57 PM](Screenshot 2026-03-25 at 8.35.57 PM.png)
+
+
+
