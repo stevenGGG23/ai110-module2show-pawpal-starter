@@ -80,7 +80,7 @@ Tests cover:
 - Recurring task recurrence (daily task auto-schedules next day on completion)
 - Conflict detection flags tasks scheduled at duplicate times
 
-**Confidence Level:** ⭐⭐⭐⭐ (4/5)
+**Confidence Level:** ⭐⭐⭐⭐⭐ (5/5)
 
 ## 📸 Demo
 
