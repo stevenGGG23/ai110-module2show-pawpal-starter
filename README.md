@@ -42,6 +42,24 @@ pip install -r requirements.txt
 6. Connect your logic to the Streamlit UI in `app.py`.
 7. Refine UML so it matches what you actually built.
 
+## Features
+
+PawPal+ supports:
+
+- Owner/pet/task models with full task metadata (category, duration, due date/time, recurrence, priority)
+- `Scheduler.generate_daily_plan` with window-aware scheduling (06:00-22:00 default)
+- `Scheduler.sort_by_time` to display tasks by due time
+- `Owner.filter_tasks` to query pending/completed tasks per pet
+- Recurring task lifecycle: complete daily/weekly tasks auto-schedules next occurrence
+- Conflict detection:
+  - `Scheduler.detect_conflicts` (due-time vs available schedule urgency)
+  - `Scheduler.detect_schedule_conflicts` (overlapping scheduled slots)
+- Rich UI feedback via Streamlit (`st.success`, `st.warning`, `st.error`, `st.table`)
+
+## 📸 Demo
+
+<a href="/course_images/ai110/pawpal_screenshot.png" target="_blank"><img src='/course_images/ai110/pawpal_screenshot.png' title='PawPal App' width='' alt='PawPal App' class='center-block' /></a>
+
 ## Smarter Scheduling
 
 This implementation includes improved logic in `pawpal_system.py`:

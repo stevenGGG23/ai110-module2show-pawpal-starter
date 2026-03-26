@@ -1,0 +1,58 @@
+```mermaid
+classDiagram
+    class Task {
+      +str title
+      +int duration_minutes
+      +str priority
+      +str category
+      +date due_date
+      +time due_time
+      +str frequency
+      +bool completed
+      +mark_completed()
+      +is_recurring_on(date)
+      +should_schedule_on(date)
+    }
+
+    class ScheduledTask {
+      +Task task
+      +datetime start_time
+      +datetime end_time
+      +str rationale
+    }
+
+    class Pet {
+      +str name
+      +str species
+      +List~Task~ tasks
+      +add_task(Task)
+      +remove_task(str)
+      +mark_task_complete(str, date)
+      +get_pending_tasks()
+    }
+
+    class Owner {
+      +str name
+      +List~Pet~ pets
+      +add_pet(Pet)
+      +remove_pet(str)
+      +all_tasks()
+      +get_pending_tasks()
+      +filter_tasks(bool, str)
+    }
+
+    class Scheduler {
+      +time day_start
+      +time day_end
+      +sort_by_time(List~Task~)
+      +generate_daily_plan(Owner, date)
+      +detect_conflicts(List~Task~)
+      +detect_schedule_conflicts(List~ScheduledTask~)
+      +explain_schedule(dict)
+    }
+
+    Owner "1" o-- "*" Pet : owns
+    Pet "1" o-- "*" Task : has
+    Scheduler o-- "*" Task : schedules
+    Scheduler o-- "*" ScheduledTask : outputs
+```

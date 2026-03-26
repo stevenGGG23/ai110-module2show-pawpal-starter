@@ -41,8 +41,16 @@
 
 **b. Judgment and verification**
 
-- Describe one moment where you did not accept an AI suggestion as-is.
-- How did you evaluate or verify what the AI suggested?
+- I rejected an AI suggestion that proposed overly complex constraint solving using linear programming library (pulp). I opted for a lightweight, understandable greedy scheduling approach that is sufficient for MVP and easier to test.
+- I verified algorithm correctness with unit tests (`test_pawpal_system.py`, `tests/test_pawpal.py`) and manual CLI runs of `main.py`.
+
+**c. Copilot strategy reflections**
+
+- Most effective Copilot features:
+  - inline code completions for methods like `Scheduler.detect_schedule_conflicts` and `Task.mark_completed` recurrence.
+  - ability to provide context with `#file:pawpal_system.py` and ask for structured method suggestions.
+- Using separate chat sessions for each phase kept design and builder iterations isolated, which made debugging simpler and reduced accidental drift.
+- As lead architect, I favored clear explicit code over complicated AI-generated one-liners, and I retained AI ideas that aligned with modularity and maintainability.
 
 ---
 

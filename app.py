@@ -68,6 +68,7 @@ if st.session_state.tasks:
 else:
     st.info("No tasks yet. Add one above.")
 
+from datetime import time
 from pawpal_system import Owner, Pet, Task, Scheduler
 
 st.divider()
@@ -90,32 +91,66 @@ if st.button("Generate schedule"):
 
     owner.add_pet(pet)
     scheduler = Scheduler(day_start=time(hour=6), day_end=time(hour=22))
+
+    st.subheader("Task insights")
+    sorted_tasks = scheduler.sort_by_time(owner.all_tasks())
+    st.success("Tasks sorted by time (from earliest at top)")
+    task_rows = []
+    for t in sorted_tasks:
+        task_rows.append({
+            "Title": t.title,
+            "Priority": t.priority,
+            "Due date": t.due_date.isoformat() if t.due_date else "—",
+            "Due time": t.due_time.strftime("%H:%M") if t.due_time else "—",
+            "Frequency": t.frequency or "—",
+            "Completed": t.completed,
+        })
+    st.table(task_rows)
+
+    st.subheader("Filtered tasks")
+    filtered = owner.filter_tasks(completed=False, pet_name=pet_name)
+    st.info(f"Showing pending tasks for {pet_name}")
+    filtered_rows = []
+    for t in filtered:
+        filtered_rows.append({
+            "Title": t.title,
+            "Priority": t.priority,
+            "Duration": f"{t.duration_minutes} min",
+        })
+    st.table(filtered_rows)
+
     plan = scheduler.generate_daily_plan(owner)
 
-    st.markdown("### Generated Schedule")
+    st.markdown("### Generated schedule")
     if plan["schedule"]:
-        rows = []
+        schedule_rows = []
         for item in plan["schedule"]:
-            rows.append({
-                "Time": f"{item.start_time.strftime('%H:%M')}-{item.end_time.strftime('%H:%M')}",
+            schedule_rows.append({
+                "Time": f"{item.start_time.strftime('%H:%M')} - {item.end_time.strftime('%H:%M')}",
                 "Task": item.task.title,
                 "Category": item.task.category,
                 "Priority": item.task.priority,
                 "Rationale": item.rationale,
             })
-        st.table(rows)
+        st.table(schedule_rows)
+        st.success("Schedule generated successfully")
     else:
-        st.info("No tasks could be scheduled.")
+        st.warning("No tasks could be scheduled.")
 
-    if plan["skipped"]:
-        st.markdown("### Skipped Tasks")
+    if plan.get("skipped"):
+        st.warning("Some tasks were skipped")
         for skip in plan["skipped"]:
             st.write(f"- {skip['task']}: {skip['reason']}")
 
-    if plan["conflicts"]:
-        st.warning("Potential conflicts detected")
+    if plan.get("conflicts"):
+        st.error("Potential conflicts detected (due-time urgency)")
         for c in plan["conflicts"]:
             st.write(f"- {c['task']}: {c['reason']}")
+
+    if plan.get("schedule_conflicts"):
+        st.error("Schedule overlaps detected")
+        for c in plan["schedule_conflicts"]:
+            st.write(f"- {c['task1']} overlaps {c['task2']}: {c['reason']}")
 
     explanation = scheduler.explain_schedule(plan)
     st.markdown("### Explanation")
